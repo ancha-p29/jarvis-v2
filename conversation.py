@@ -4,7 +4,8 @@ Order of handling for each utterance:
   1. Tool intents (deterministic, work with NO model at all). This is what
      makes "upload it", "find my resume", "lock the screen" reliable on a
      phone call, where you do not want the model improvising.
-  2. The Ollama brain from JARVIS v1, if it is running.
+  2. The cloud brain (fast open-source models, see brain.py), if a
+     provider key is configured.
   3. A graceful fallback that still answers with deadlines and commitments.
 
 The model can also request a tool by ending its reply with:

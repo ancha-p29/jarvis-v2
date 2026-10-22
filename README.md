@@ -14,20 +14,27 @@ JARVIS v2 takes the local JARVIS companion (v1) and gives it:
    screen, list deadlines and commitments. Add your own tool in about
    10 lines, exactly like in the reel.
 
-Everything except the actual phone call runs **100% locally**: Ollama
-brain, JSON memory, no cloud AI, no subscriptions. The phone call itself
-uses Twilio (about $1.15/month for a US number, ~$0.014/min), and
-Twilio's built-in speech, so no other API keys are needed. Sarvam AI
-(Saaras/Bulbul) is supported as an optional speech upgrade for Indian
-languages.
+The brain is **fast hosted open-source models, no Ollama, no local
+model download**. Default is Groq running `openai/gpt-oss-20b` at
+roughly 1,000 tokens/second on a free API key, so a spoken reply
+lands in about a second instead of the many seconds a local model
+needs on a laptop CPU. Sarvam (`sarvam-105b`, the reel's model
+family), OpenRouter, Together, and Hugging Face are one-line swaps
+in `config.yaml`, and memory stays as plain local JSON either way.
+The phone call itself uses Twilio (about $1.15/month for a US
+number, ~$0.014/min) with Twilio's built-in speech. Sarvam
+Saaras/Bulbul is supported as an optional speech upgrade for
+Indian languages.
 
 ## Try it in 5 minutes (no accounts, no phone setup)
 
-You need Python 3.10+ and [Ollama](https://ollama.com) for the full
-chat brain. Tools and the watcher work even without Ollama.
+You need Python 3.10+ and ONE free brain API key for full chat
+(recommended: Groq, https://console.groq.com/keys, set
+`GROQ_API_KEY`). Tools and the watcher work even without a key.
 
 ```bash
 pip install pyyaml
+export GROQ_API_KEY=your-key-here        # PowerShell: $env:GROQ_API_KEY = "your-key-here"
 
 # 1. Simulated phone call: JARVIS "calls", you type, tools actually run
 python main.py --phone-sim
@@ -71,12 +78,12 @@ Full step-by-step, including Windows notes and troubleshooting, is in
                                                   v
  your phone ──call──> [phone_server.py] ──> [conversation.py]
                         stdlib HTTP, TwiML      │ tool intents first
-                                                │ then Ollama brain
+                                                │ then cloud brain (Groq etc.)
                                                 v
                                         [tools.py] find files, draft email,
                                         whatsapp, music, lock screen, ...
                                         [memory.py] facts, commitments, journal
-                                        [brain.py] Ollama llama3.1:8b (local)
+                                        [brain.py] open models via Groq / Sarvam / OpenRouter / Together / HF
 ```
 
 | Module | Job |
@@ -88,7 +95,8 @@ Full step-by-step, including Windows notes and troubleshooting, is in
 | `conversation.py` | One brain for terminal, mic, and phone; tool intents + `[tool: ...]` tags |
 | `tools.py` | The tool registry. Add yours here. |
 | `call_me.py` | CLI to trigger a call right now |
-| `main.py`, `brain.py`, `memory.py`, `persona.py`, `stt.py`, `tts.py`, `wakeword.py` | JARVIS v1, carried forward |
+| `main.py`, `memory.py`, `persona.py`, `stt.py`, `tts.py`, `wakeword.py` | JARVIS v1, carried forward |
+| `brain.py` | **Rewritten in v2.1:** provider-agnostic fast open-model client (Groq first), memory directives kept |
 
 ## Deadlines
 

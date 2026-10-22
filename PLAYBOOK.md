@@ -25,8 +25,14 @@ tools run for real: try "find my resume", "what are my deadlines",
 "draft an email to Alex about the interview", "lock my screen"
 (dry run, it will explain), then "goodbye".
 
-Optional full brain: install Ollama from ollama.com, then
-`ollama pull llama3.1:8b` and `ollama serve`. Without it, JARVIS
+Full chat brain (2 minutes): get a FREE Groq key at
+console.groq.com/keys and set it in this PowerShell:
+`$env:GROQ_API_KEY = 'your-key-here'`. That runs the open-source
+gpt-oss-20b model at roughly 1,000 tokens/second, so replies feel
+instant on calls. No Ollama, no 5 GB download. Prefer another
+host? Set SARVAM_API_KEY (sarvam-105b), OPENROUTER_API_KEY,
+TOGETHER_API_KEY, or HF_TOKEN instead; config.yaml brain.provider
+picks, "auto" takes whichever key exists. Without any key, JARVIS
 still answers with tools and deadlines (house rules mode).
 
 ## Phase 2: Deadlines and the watcher (5 minutes)
@@ -79,7 +85,7 @@ Free Twilio trial credit covers testing.
    call you, and Twilio fetches the greeting from your server.
 
 Keep three windows running for the full J experience:
-server (`--serve`), watcher (`--watch`), and Ollama (`ollama serve`).
+server (`--serve`) and watcher (`--watch`). The brain is a cloud API now, nothing else to run.
 
 ## Optional: Sarvam voices
 
@@ -104,7 +110,7 @@ from the openwakeword package on first run.
 | Twilio call connects but silence | Webhook URL wrong or ngrok stopped. Check PUBLIC_BASE_URL and the /voice POST setting |
 | JARVIS answers but cannot hear long replies | Speak after the greeting finishes; Gather times out after silence |
 | Watcher never calls | Deadline file is data\deadlines.json (not the .example), due time is in a window, state file not already marked. Delete data\watcher_state.json to re-test |
-| Ollama offline message | `ollama serve` in its own window; tools still work without it |
+| Brain offline / house rules message | No API key in this window. Set GROQ_API_KEY (or an alternative) and restart; tools still work without it |
 | Port 8765 busy | Set PORT env var or phone.port in config.yaml |
 
 ## Make it yours

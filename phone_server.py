@@ -56,7 +56,7 @@ def build_conversation(config: dict):
     mem = memory_mod.Memory(resolve(config["memory"]["dir"]),
                             resolve(config["memory"]["journal_dir"]))
     brain = Brain(config, mem, persona_mod.build_system_prompt)
-    if not brain.is_ollama_up(timeout=1.0):
+    if not brain.configured():
         brain = None  # Conversation still answers with tools and house rules
     deadlines = DeadlineStore(resolve(
         (config.get("watcher", {}) or {}).get("deadlines_file", "data/deadlines.json")))

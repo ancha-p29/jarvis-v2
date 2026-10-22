@@ -54,7 +54,7 @@ def build_conversation(config: dict):
     mem = memory_mod.Memory(resolve(config["memory"]["dir"]),
                             resolve(config["memory"]["journal_dir"]))
     brain = brain_mod.Brain(config, mem, persona_mod.build_system_prompt)
-    if not brain.is_ollama_up(timeout=1.0):
+    if not brain.configured():
         brain = None
     deadlines = DeadlineStore(resolve(
         (config.get("watcher", {}) or {}).get("deadlines_file", "data/deadlines.json")))
@@ -80,7 +80,12 @@ def check_environment(config: dict) -> bool:
     mem = memory_mod.Memory(resolve(config["memory"]["dir"]),
                             resolve(config["memory"]["journal_dir"]))
     b = brain_mod.Brain(config, mem, persona_mod.build_system_prompt)
-    line(b.is_ollama_up(), f"Ollama reachable at {b.ollama_url} (needed for full chat, tools work without it)")
+    if b.configured():
+        line(b.is_up(), f"Brain API reachable: {b.describe()} (tools work without it too)")
+    else:
+        print("[!!] No brain API key set (full chat needs one, tools work without it)")
+        print(b.missing_key_help())
+        ok = False
     voice_path = resolve(config["tts"]["voice_model"])
     line(voice_path.exists(), f"Piper voice model: {voice_path} (laptop voice mode only)")
     for module, label in [("sounddevice", "sounddevice (mic/speaker)"),
@@ -168,8 +173,8 @@ def voice_mode(config: dict) -> int:
     import tts as tts_mod
     import wakeword as wakeword_mod
     brain, _mem = build_brain(config)
-    if not brain.is_ollama_up():
-        print(f"Cannot reach Ollama at {brain.ollama_url}. Run: python main.py --check")
+    if not brain.configured():
+        print(brain.missing_key_help())
         return 1
     audio_cfg = config.get("audio", {})
     mic, speaker = audio_cfg.get("mic_device"), audio_cfg.get("speaker_device")
