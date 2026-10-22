@@ -1,0 +1,62 @@
+# JARVIS v2 configuration. Edit freely, then restart.
+# Relative paths resolve from the project root.
+
+user:
+  name: "Praveen"
+
+persona:
+  name: "JARVIS"
+  address_mode: "sir"        # "sir" | "name" | "none"
+  max_spoken_sentences: 3
+
+wakeword:
+  model: "hey_jarvis"
+  sensitivity: 0.5
+
+stt:
+  model: "small"
+  language: "en"
+  device: "cpu"
+  compute_type: "int8"
+
+brain:
+  ollama_url: "http://localhost:11434"
+  model: "llama3.1:8b"
+  temperature: 0.8
+  max_history_turns: 20
+
+tts:
+  engine: "piper"
+  voice_model: "data/voices/en_US-lessac-medium.onnx"
+
+audio:
+  mic_device: null
+  speaker_device: null
+  sample_rate: 16000
+
+memory:
+  dir: "data/memory"
+  journal_dir: "data/journal"
+
+# ---- NEW IN V2: PHONE ----
+phone:
+  # "simulated" = zero accounts, test everything today.
+  # "twilio"    = real calls. Set the env vars in .env.example first.
+  provider: "simulated"
+  port: 8765
+  user_phone: "+16174127030"   # Praveen's number, E.164 format
+  twilio_number: ""            # or set TWILIO_PHONE_NUMBER env var
+
+# ---- NEW IN V2: DEADLINE WATCHER ----
+watcher:
+  interval_seconds: 300
+  deadlines_file: "data/deadlines.json"
+  state_file: "data/watcher_state.json"
+
+# ---- NEW IN V2: LAPTOP TOOLS ----
+tools:
+  # Folders the find_files / find_resume tools search.
+  search_dirs: ["~", "~/Downloads", "~/Documents", "~/Desktop"]
+  email_drafts_dir: "data/email_drafts"
+  lock_screen_dry_run: true    # safety first. Set false when you trust it.
+  open_browser: false          # true lets whatsapp/music tools open links

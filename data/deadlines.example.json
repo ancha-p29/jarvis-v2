@@ -1,0 +1,1 @@
+[{"created":"2026-10-22T09:30:00","done":false,"due":"2099-01-01T17:00:00","id":1,"kind":"example","notes":"Copy this file to deadlines.json and set a real due time about an hour from now, then run: python main.py --watch-once","title":"Example deadline, edit or delete me"}]

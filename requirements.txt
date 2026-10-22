@@ -1,0 +1,14 @@
+# JARVIS v2 dependencies.
+# Core (text mode, tools, watcher, phone server, simulated calls): pyyaml only.
+# The phone server is pure standard library on purpose.
+pyyaml>=6.0
+
+# Laptop voice mode only (wake word, mic, local speech). Not needed for phone calls:
+# numpy>=1.24
+# sounddevice>=0.4.6
+# faster-whisper>=1.0.0
+# openwakeword>=0.6.0
+# piper-tts>=1.2.0
+
+# Tests:
+# pytest>=8.0

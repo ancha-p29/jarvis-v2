@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+data/memory/*.json
+data/journal/*.md
+data/calls/*.md
+data/email_drafts/*.md
+data/watcher_state.json
+data/deadlines.json
+data/voices/
+models/*.onnx
+*.muse-github-snapshot-sync.json
